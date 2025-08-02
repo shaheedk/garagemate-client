@@ -11,8 +11,11 @@ import Employees from "./pages/Employees";
 import Home from "./pages/Home";
 import Dashboard from "./components/ui/Dashboard";
 import Products from "./pages/Products";
-import WorkOrderPage from "./pages/CreateWorkOrders";
-import Works from "./pages/Works";
+
+
+
+import { ToastContainer } from 'react-toastify';
+
 
 
 
@@ -20,7 +23,7 @@ const App = () => {
   return (
     <div>
       {/* <Header/> */}
-   
+   <ToastContainer/>
       <Routes>
         <Route path="/" element={<Home />} />
         
@@ -30,14 +33,13 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/companies" element={<CompanyTable />} />
         <Route path="/services" element={<Services />} />
-        <Route path="/customer" element={<WorkOrderPage/>}/>
+        
         <Route path="/bill" element={<Billing/>}/>
         <Route path="/coupen" element={<Coupen/>}/>
         <Route path="/employees" element={<Employees/>}/>
         <Route path="/dashboard" element={<Dashboard/>}/>
         <Route path="/products" element={<Products/>}/>
-        <Route path="/works" element={<Works/>}/>
-
+        
       </Routes>
     </div>
   );

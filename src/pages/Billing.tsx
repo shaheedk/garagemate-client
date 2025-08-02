@@ -2,7 +2,7 @@ import useBill from "../hooks/useBill";
 import BillInput from "../components/common/input/BillInput";
 import Sidebar from "../components/layout/Sidebar";
 import BillTable from "../components/ui/BillTable";
-import SearchBar from "../components/common/input/SearchBar";
+import SearchBar from "../components/common/search/SearchBar";
 
 const Billing = () => {
   const { fields, handleSubmit, handleInputChange } = useBill();
