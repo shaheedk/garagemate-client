@@ -1,5 +1,8 @@
 import { useState } from "react";
 import type { ServiceData } from "../types/ServiceType";
+import { extractData } from "../utils/helper";
+import instance from "../axios/axios";
+import { toast } from "react-toastify";
 
 const useService = () => {
   const headers = [
@@ -13,23 +16,9 @@ const useService = () => {
 
   const [services, setServices] = useState<ServiceData[]>([]);
   const fetchServices = async () => {
-    const response = [
-      {
-        serviceName: "Car Polishing",
-        description: "Polish car using these lorem ipsum",
-        price: "12999 ₹",
-        warranty: "12 M",
-        status: "Active",
-      },
-      {
-        serviceName: "Bike Wash",
-        description: "Full wash service",
-        price: "499 ₹",
-        warranty: "6 M",
-        status: "Inactive",
-      },
-    ];
-    setServices(response);
+    const response = await instance.get('/service')
+    console.log("service response", response.data);
+    setServices(response.data);
   };
   const handleEdit = (item: ServiceData) => {
     console.log("Edit clicked for:", item);
@@ -45,47 +34,47 @@ const useService = () => {
 
   const [fields, setFields] = useState([
     {
-      name: "service_name",
+      name: "serviceName",
       label: "Service Name",
       type: "text",
       placeholder: "Enter Service name",
       value: "",
     },
     {
-      name: "service_price",
+      name: "price",
       label: "Service Price",
-      type: "text",
+      type: "number",
       placeholder: "Enter Service price",
       value: "",
     },
     {
-      name: "service_decription",
+      name: "description",
       label: "Service Description",
       type: "text",
       placeholder: "Enter Service Details",
       value: "",
     },
     {
-      name: "service_duration",
-      label: "Service Estimated Duration",
-      type: "text",
-      placeholder: "Enter Service Estimated duration",
-      value: "",
-    },
-    {
-      name: "service_warranty",
+      name: "warranty",
       label: "Service Warranty ",
       type: "text",
       placeholder: "Enter Service Warranty in months",
       value: "",
     },
   ]);
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form Submitted:", fields);
-    // Here you can handle API request
-  };
+    const payload = extractData(fields);
 
+    try {
+      const res = await instance.post('/service', payload);
+      toast.success('Service created successfully!');
+      console.log("Form Submitted:", res.data);
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Failed to create service');
+      console.error("Error submitting form:", error);
+    }
+  };
   const handleInputChange = (index: number, event: any) => {
     const newFields = [...fields];
     newFields[index].value = event.target.value;

@@ -1,7 +1,7 @@
 export interface ServiceData {
   serviceName: string;
   description: string;
-  price: string;
+  price: number;
   warranty: string;
   status: string;
 }

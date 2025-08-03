@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import instance from "../../axios/axios";
 
 interface Field {
   name: string;
@@ -106,6 +107,7 @@ const ProductForm = () => {
       return acc;
     }, {} as Record<string, string>);
     console.log("Form Data:", data);
+    instance.post('/', data);
   };
 
   return (
