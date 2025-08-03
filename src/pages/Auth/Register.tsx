@@ -1,11 +1,12 @@
-import { useState } from "react";
+
 import RegisterHeader from "../../components/layout/headers/AuthHeader";
 import InputField from "../../components/common/input/input";
 import useAuthRegister from "../../hooks/AuthRegister";
+import { assets } from "../../assets/assets";
 
 const Register = () => {
   const { fields, handleSubmit, handleInputChange } = useAuthRegister();
-  const [image, setImage] = useState<File | null>(null);
+  // const [image, setImage] = useState<File | null>(null);
 
   return (
     <div className="w-full min-h-screen bg-gray-50">
@@ -63,7 +64,7 @@ const Register = () => {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Logo
             </label>
-            <div className="w-32 h-32 flex items-center justify-center border-2 border-dashed border-gray-300 rounded-full overflow-hidden">
+            {/* <div className="w-32 h-32 flex items-center justify-center border-2 border-dashed border-gray-300 rounded-full overflow-hidden">
               <label
                 htmlFor="image"
                 className="cursor-pointer w-full h-full flex items-center justify-center text-blue-400 text-sm font-medium"
@@ -81,7 +82,17 @@ const Register = () => {
                   }}
                 />
               </label>
-            </div>
+            </div> */}
+
+<div className="w-32 h-32 flex items-center justify-center border-2 border-dashed border-gray-300 rounded-full overflow-hidden">
+  <img
+    src={assets.profile_img} // <-- Replace with your actual image path
+    alt="Logo"
+    className="w-full h-full object-cover"
+  />
+</div>
+
+
           </div>
 
           {/* Submit Button */}

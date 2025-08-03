@@ -1,6 +1,6 @@
 import { AiFillProduct } from "react-icons/ai";
 import Card from "../common/buttons/NavigationBtn";
-import { FaFileInvoice, FaUserTie, FaCar, FaBuilding, FaTools, FaTags, FaClipboardList } from "react-icons/fa";
+import { FaFileInvoice, FaUserTie, FaCar,  FaTools, FaTags, FaClipboardList } from "react-icons/fa";
 
 const Dashboard = () => {
   const cards = [
