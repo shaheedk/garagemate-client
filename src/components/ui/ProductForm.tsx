@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import instance from "../../axios/axios";
 
 interface Field {
@@ -13,85 +13,39 @@ interface Field {
 const ProductForm = () => {
   const [fields, setFields] = useState<Field[]>([
     {
-      name: "product_name",
+      name: "productName", // ✅ match API
       label: "Product Name",
       type: "text",
-      placeholder: "Enter Service name",
+      placeholder: "Enter product name",
       value: "",
     },
     {
-      name: "product_price",
+      name: "price", // ✅ match API
       label: "Product Price",
       type: "text",
-      placeholder: "Enter Service price",
+      placeholder: "Enter product price",
       value: "",
     },
     {
-      name: "product_description",
+      name: "description", // ✅ match API
       label: "Product Description",
       type: "textarea",
-      placeholder: "Enter Service description",
+      placeholder: "Enter product description",
       value: "",
     },
     {
-      name: "product_quantity",
-      label: "Product Quantity",
-      type: "text",
-      placeholder: "Product Qty",
-      value: "",
-    },
-    {
-      name: "product_unit",
-      label: "Product Unit",
-      type: "select",
-      placeholder: "Product Unit",
-      value: "",
-      options: [],
-    },
-    {
-      name: "product_brand",
+      name: "brand", // ✅ match API
       label: "Product Brand",
       type: "text",
-      placeholder: "Product Brand",
+      placeholder: "Enter product brand",
       value: "",
-    },
-    {
-      name: "product_category",
-      label: "Product Category",
-      type: "select",
-      placeholder: "Product Category",
-      value: "",
-      options: [],
     },
   ]);
 
-  // Simulate backend fetch
-  useEffect(() => {
-    const fetchOptions = async () => {
-      const units = [
-        { label: "Piece", value: "piece" },
-        { label: "Kilogram", value: "kg" },
-        { label: "Liter", value: "ltr" },
-      ];
-      const categories = [
-        { label: "Car Wash", value: "car_wash" },
-        { label: "Detailing", value: "detailing" },
-        { label: "Maintenance", value: "maintenance" },
-      ];
-
-      setFields((prev) =>
-        prev.map((field) => {
-          if (field.name === "product_unit") return { ...field, options: units };
-          if (field.name === "product_category") return { ...field, options: categories };
-          return field;
-        })
-      );
-    };
-
-    fetchOptions();
-  }, []);
-
-  const handleInputChange = (index: number, e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleInputChange = (
+    index: number,
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     const value = e.target.value;
     setFields((prev) => {
       const updated = [...prev];
@@ -100,21 +54,41 @@ const ProductForm = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const data = fields.reduce((acc, field) => {
       acc[field.name] = field.value;
       return acc;
     }, {} as Record<string, string>);
-    console.log("Form Data:", data);
-    instance.post('/product', data);
+
+    // Convert price to number
+    if (data.price) {
+      data.price = Number(data.price) as any;
+    }
+
+    console.log("Payload to API:", data);
+
+    try {
+      const res = await instance.post("/product", data);
+      console.log("✅ Product created:", res.data);
+    } catch (err) {
+      console.error("❌ Error creating product:", err);
+    }
   };
-  
+
   return (
-    <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6  mx-auto bg-white rounded-2xl mt-5">
+    <form
+      onSubmit={handleSubmit}
+      className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 mx-auto bg-white rounded-2xl mt-5"
+    >
       {fields.map((field, index) => (
-        <div key={field.name} className={field.name === "product_description" ? "md:col-span-2" : ""}>
-          <label className="block mb-1 text-sm font-medium text-gray-700">{field.label}</label>
+        <div
+          key={field.name}
+          className={field.type === "textarea" ? "md:col-span-2" : ""}
+        >
+          <label className="block mb-1 text-sm font-medium text-gray-700">
+            {field.label}
+          </label>
 
           {field.type === "textarea" ? (
             <textarea
@@ -123,19 +97,6 @@ const ProductForm = () => {
               placeholder={field.placeholder}
               className="w-full border border-gray-300 rounded-md px-3 py-2 h-24 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-          ) : field.type === "select" ? (
-            <select
-              value={field.value}
-              onChange={(e) => handleInputChange(index, e)}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">{field.placeholder}</option>
-              {field.options?.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
           ) : (
             <input
               type="text"
