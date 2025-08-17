@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import instance from "../axios/axios"; // axios instance
 
 const useBill = () => {
   const [fields, setFields] = useState([
@@ -31,13 +32,14 @@ const useBill = () => {
       value: "",
     },
 
-    // service details 
-       {
+    // service details
+    {
       name: "service_name",
       label: "Service Name",
-      type: "text",
-      placeholder: "Enter service name",
+      type: "select", // <-- make it a select field
+      placeholder: "Select a service",
       value: "",
+      options: [], // will be populated from backend
     },
     {
       name: "service_warranty",
@@ -61,72 +63,110 @@ const useBill = () => {
       value: "",
     },
 
-    // price details 
-  {
-    name: "service_amount",
-    label: "Service amount",
-    type: "text",
-    placeholder: "Enter Service amount",
-    value: "",
-  },
-  {
-    name: "tax_amount",
-    label: "Tax",
-    type: "text",
-    placeholder: "Enter Tax amount",
-    value: "",
-  },
-  {
-    name: "additional_charge",
-    label: "Additional Charge",
-    type: "text",
-    placeholder: "Enter Additional charge",
-    value: "",
-  },
-  {
-    name: "additional_charge_for",
-    label: "Additional Charge for",
-    type: "text",
-    placeholder: "Additional charge for :",
-    value: "",
-  },
-  {
-    name: "discount_amount",
-    label: "Discount",
-    type: "text",
-    placeholder: "Enter Discount amount",
-    value: "",
-  },
-  {
-    name: "final_amount",
-    label: "Final amount have to pay",
-    type: "text",
-    placeholder: "Final amount",
-    value: "",
-  }
+    // price details
+    {
+      name: "service_amount",
+      label: "Service amount",
+      type: "text",
+      placeholder: "Enter Service amount",
+      value: "",
+    },
+    {
+      name: "tax_amount",
+      label: "Tax",
+      type: "text",
+      placeholder: "Enter Tax amount",
+      value: "",
+    },
+    {
+      name: "additional_charge",
+      label: "Additional Charge",
+      type: "text",
+      placeholder: "Enter Additional charge",
+      value: "",
+    },
+    {
+      name: "additional_charge_for",
+      label: "Additional Charge for",
+      type: "text",
+      placeholder: "Additional charge for :",
+      value: "",
+    },
+    {
+      name: "discount_amount",
+      label: "Discount",
+      type: "text",
+      placeholder: "Enter Discount amount",
+      value: "",
+    },
+    {
+      name: "final_amount",
+      label: "Final amount have to pay",
+      type: "text",
+      placeholder: "Final amount",
+      value: "",
+    },
   ]);
 
- 
+  const [services, setServices] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const res = await instance.get("/services"); // adjust API path
+        setServices(res.data);
+
+        // update service_name field options
+        setFields((prev) =>
+          prev.map((f) =>
+            f.name === "service_name"
+              ? { ...f, options: res.data.map((s: any) => ({ label: s.name, value: s._id, price: s.basePrice })) }
+              : f
+          )
+        );
+      } catch (err) {
+        console.error("Failed to fetch services:", err);
+      }
+    };
+
+    fetchServices();
+  }, []);
+
+  
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Customer Data:", fields);
-   
-    // TODO: Send to API or backend
+    console.log("Bill Data:", fields);
+    // TODO: send to API
   };
 
   const handleInputChange = (
     index: number,
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const newFields = [...fields];
-    newFields[index].value = event.target.value;
+    const field = newFields[index];
+
+    // If selecting a service, auto-fill price
+    if (field.name === "serviceName") {
+      const selectedService = field.options?.find((opt: any) => opt.value === event.target.value);
+      if (selectedService) {
+        field.value = selectedService.value;
+        // update service amount field
+        const serviceAmountIndex = newFields.findIndex((f) => f.name === "service_amount");
+        if (serviceAmountIndex !== -1) {
+          newFields[serviceAmountIndex].value = selectedService.price.toString();
+        }
+      }
+    } else {
+      field.value = event.target.value;
+    }
+
     setFields(newFields);
   };
 
   return {
     fields,
-    
     handleSubmit,
     handleInputChange,
   };
