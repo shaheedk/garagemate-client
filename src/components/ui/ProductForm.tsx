@@ -107,9 +107,9 @@ const ProductForm = () => {
       return acc;
     }, {} as Record<string, string>);
     console.log("Form Data:", data);
-    instance.post('/', data);
+    instance.post('/product', data);
   };
-
+  
   return (
     <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6  mx-auto bg-white rounded-2xl mt-5">
       {fields.map((field, index) => (

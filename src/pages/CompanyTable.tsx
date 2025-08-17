@@ -12,7 +12,7 @@ const CompanyTable = () => {
   };
 
   const handleEdit = (id: number) => {
-    alert(`Edit company with ID: ${id}`);
+    alert(`Edit company with ID: {id}`);
   };
 
   return (
@@ -35,7 +35,7 @@ const CompanyTable = () => {
             {companies.map((company, index) => (
               <tr
                 key={company.id}
-                className={`text-gray-700 ${
+                className={`text-gray-700 {
                   index !== companies.length - 1
                     ? "border-b border-gray-200"
                     : ""
@@ -44,7 +44,7 @@ const CompanyTable = () => {
                 <td className="p-4">{company.name}</td>
                 <td className="p-4">
                   <a
-                    href={`mailto:${company.email}`}
+                    href={`mailto:{company.email}`}
                     className="text-blue-600 hover:underline"
                   >
                     {company.email}
@@ -52,7 +52,7 @@ const CompanyTable = () => {
                 </td>
                 <td className="p-4">
                   <span
-                    className={`inline-block px-4 py-1 rounded-full text-sm font-medium ${
+                    className={`inline-block px-4 py-1 rounded-full text-sm font-medium {
                       company.status === "Active"
                         ? "bg-gray-100 text-gray-800"
                         : "bg-gray-100 text-gray-800"

@@ -35,7 +35,7 @@ const BillTable = () => {
                 <a href={item.link}>{item.vehicle}</a>
               </td>
               <td className="px-4 py-3">{item.date}</td>
-              <td className="px-4 py-3">${item.cost}</td>
+              <td className="px-4 py-3">₹ {item.cost}</td>
               <td className="px-4 py-3">
                 <span className={`inline-flex items-center   px-3 py-1 text-sm font-medium ${statusClasses[item.status]}`}>
                   {item.status}

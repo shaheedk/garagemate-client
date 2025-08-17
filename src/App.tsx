@@ -15,6 +15,8 @@ import Products from "./pages/Products";
 
 
 import { ToastContainer } from 'react-toastify';
+import CreateCustomer from "./pages/CreateCustomer";
+import CreateVehicle from "./pages/CreateVehicle";
 
 
 
@@ -39,6 +41,9 @@ const App = () => {
         <Route path="/employees" element={<Employees/>}/>
         <Route path="/dashboard" element={<Dashboard/>}/>
         <Route path="/products" element={<Products/>}/>
+        <Route path="/create-customer" element={<CreateCustomer/>}/>
+        <Route path="/create-vehicle" element={<CreateVehicle/>}/>
+
         
       </Routes>
     </div>
