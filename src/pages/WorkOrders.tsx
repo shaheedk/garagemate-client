@@ -3,6 +3,7 @@ import  { useEffect } from "react";
 import Sidebar from "../components/layout/Sidebar";
 import UserActions from "../components/layout/headers/UserActions";
 import useOrder from "../hooks/useOrder";
+import WorkOrderCreator from "../components/ui/CreateWorkOrder";
 import Table from "../components/ui/Table";
 
 const WorkOrders = () => {
@@ -66,6 +67,7 @@ fetchData}=useOrder()
 
         {/* Table (responsive scroll for small screens) */}
         <div className="overflow-x-auto  bg-white shadow rounded-lg">
+        <WorkOrderCreator/>
           <Table className="" data={data} headers={headers} />
         </div>
       </div>

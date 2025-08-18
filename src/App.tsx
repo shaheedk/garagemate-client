@@ -13,7 +13,6 @@ import Dashboard from "./components/ui/Dashboard";
 import Products from "./pages/Products";
 
 
-
 import { ToastContainer } from 'react-toastify';
 import CreateCustomer from "./pages/CreateCustomer";
 import CreateVehicle from "./pages/CreateVehicle";
