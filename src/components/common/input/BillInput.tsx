@@ -1,32 +1,39 @@
+import React from "react";
+
 interface BillInputProps {
   label: string;
   name: string;
   type: string;
   value: string;
-  placeholder: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+  placeholder?: string;
   options?: { label: string; value: string }[];
+  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   className?: string;
 }
 
-const BillInput = ({ label, name, type, value, placeholder, onChange, options, className }: BillInputProps) => {
+const BillInput: React.FC<BillInputProps> = ({
+  label,
+  name,
+  type,
+  value,
+  placeholder,
+  options,
+  onChange,
+  className,
+}) => {
   return (
-    <div className={className}>
-      <label className="block text-gray-700 mb-2">{label}</label>
-      {type === "textarea" ? (
-        <textarea
-          name={name}
-          value={value}
-          placeholder={placeholder}
-          onChange={onChange}
-          className="w-full p-2 border rounded-md"
-        />
-      ) : type === "select" ? (
+    <div className="flex flex-col gap-2">
+      <label htmlFor={name} className="text-sm font-medium text-gray-700">
+        {label}
+      </label>
+
+      {type === "select" ? (
         <select
+          id={name}
           name={name}
           value={value}
           onChange={onChange}
-          className="w-full p-2 border rounded-md"
+          className={`border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${className}`}
         >
           <option value="">-- Select --</option>
           {options?.map((opt) => (
@@ -35,14 +42,24 @@ const BillInput = ({ label, name, type, value, placeholder, onChange, options, c
             </option>
           ))}
         </select>
-      ) : (
-        <input
-          type={type}
+      ) : type === "textarea" ? (
+        <textarea
+          id={name}
           name={name}
           value={value}
           placeholder={placeholder}
           onChange={onChange}
-          className="w-full p-2 border rounded-md"
+          className={`border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${className}`}
+        />
+      ) : (
+        <input
+          id={name}
+          name={name}
+          type={type}
+          value={value}
+          placeholder={placeholder}
+          onChange={onChange}
+          className={`border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${className}`}
         />
       )}
     </div>

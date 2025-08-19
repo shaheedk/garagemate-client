@@ -1,62 +1,64 @@
 import { useState, useEffect } from "react";
 import instance from "../axios/axios"; // axios instance
+import type { Service } from "../types/WorkOrder";
 
 const useBill = () => {
   const [fields, setFields] = useState([
     {
-      name: "customer_name",
+      name: "name",
       label: "Customer Name",
+      type: "select", // ✅ change to select
+      placeholder: "Select customer",
+      value: "",
+      options: [],
+    },
+    {
+      name: "phone",
+      label: "Phone Number",
       type: "text",
-      placeholder: "Enter customer name",
+      placeholder: "Enter number",
       value: "",
     },
     {
-      name: "vehicle_number",
+      name: "vehicleNumber",
       label: "Vehicle Number",
       type: "text",
       placeholder: "Enter vehicle number",
       value: "",
     },
     {
-      name: "service_brand",
+      name: "serviceBrand",
       label: "Vehicle Make and Model",
       type: "text",
       placeholder: "Enter vehicle model & brand",
       value: "",
     },
-    {
-      name: "number",
-      label: "Number",
-      type: "text",
-      placeholder: "Enter Number",
-      value: "",
-    },
 
     // service details
     {
-      name: "service_name",
+      name: "serviceName",
       label: "Service Name",
-      type: "select", // <-- make it a select field
+      type: "select", 
       placeholder: "Select a service",
       value: "",
-      options: [], // will be populated from backend
+      options: [],
     },
     {
-      name: "service_warranty",
+      name: "serviceWarranty",
       label: "Service Warranty",
       type: "text",
       placeholder: "Enter warranty in months",
       value: "",
     },
     {
-      name: "worker_name",
+      name: "workerName",
       label: "Worker Name",
       type: "text",
       placeholder: "Enter worker name",
       value: "",
     },
     {
-      name: "service_description",
+      name: "serviceDescription",
       label: "Service Description",
       type: "text",
       placeholder: "Enter service details",
@@ -65,42 +67,42 @@ const useBill = () => {
 
     // price details
     {
-      name: "service_amount",
+      name: "serviceAmount",
       label: "Service amount",
       type: "text",
       placeholder: "Enter Service amount",
       value: "",
     },
     {
-      name: "tax_amount",
+      name: "taxAmount",
       label: "Tax",
       type: "text",
       placeholder: "Enter Tax amount",
       value: "",
     },
     {
-      name: "additional_charge",
+      name: "additionalCharge",
       label: "Additional Charge",
       type: "text",
       placeholder: "Enter Additional charge",
       value: "",
     },
     {
-      name: "additional_charge_for",
+      name: "additionalChargeFor",
       label: "Additional Charge for",
       type: "text",
       placeholder: "Additional charge for :",
       value: "",
     },
     {
-      name: "discount_amount",
+      name: "discountAmount",
       label: "Discount",
       type: "text",
       placeholder: "Enter Discount amount",
       value: "",
     },
     {
-      name: "final_amount",
+      name: "finalAmount",
       label: "Final amount have to pay",
       type: "text",
       placeholder: "Final amount",
@@ -108,31 +110,63 @@ const useBill = () => {
     },
   ]);
 
-  const [services, setServices] = useState<any[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
+  const [customers, setCustomers] = useState<any[]>([]);
+
+  // ✅ Fetch services
+  const fetchServices = async () => {
+    try {
+      const res = await instance.get("/service");
+      setServices(res.data);
+
+      setFields((prev) =>
+        prev.map((f) =>
+          f.name === "serviceName"
+            ? {
+                ...f,
+                options: res.data.map((s: any) => ({
+                  label: s.serviceName,
+                  value: s._id,
+                  price: s.price,
+                })),
+              }
+            : f
+        )
+      );
+    } catch (err) {
+      console.error("Failed to fetch services:", err);
+    }
+  };
+
+  // ✅ Fetch customers
+  const fetchCustomers = async () => {
+    try {
+      const res = await instance.get("/customer");
+      setCustomers(res.data);
+
+      setFields((prev) =>
+        prev.map((f) =>
+          f.name === "name"
+            ? {
+                ...f,
+                options: res.data.map((c: any) => ({
+                  label: c.customerName,
+                  value: c._id,
+                  phone: c.phone,
+                })),
+              }
+            : f
+        )
+      );
+    } catch (err) {
+      console.error("Failed to fetch customers:", err);
+    }
+  };
 
   useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        const res = await instance.get("/services"); // adjust API path
-        setServices(res.data);
-
-        // update service_name field options
-        setFields((prev) =>
-          prev.map((f) =>
-            f.name === "service_name"
-              ? { ...f, options: res.data.map((s: any) => ({ label: s.name, value: s._id, price: s.basePrice })) }
-              : f
-          )
-        );
-      } catch (err) {
-        console.error("Failed to fetch services:", err);
-      }
-    };
-
     fetchServices();
+    fetchCustomers();
   }, []);
-
-  
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -147,13 +181,35 @@ const useBill = () => {
     const newFields = [...fields];
     const field = newFields[index];
 
-    // If selecting a service, auto-fill price
-    if (field.name === "serviceName") {
-      const selectedService = field.options?.find((opt: any) => opt.value === event.target.value);
+    // ✅ Handle customer selection
+    if (field.name === "name") {
+      const selectedCustomer: any = field.options?.find(
+        (opt: any) => opt.value === event.target.value
+      );
+      if (selectedCustomer) {
+        field.value = selectedCustomer.value;
+
+        // auto-fill phone number
+       // auto-fill phone number
+const phoneIndex = newFields.findIndex((f) => f.name === "phone");
+if (phoneIndex !== -1) {
+  newFields[phoneIndex].value = selectedCustomer.phone || "";
+}
+
+      }
+    }
+    // ✅ Handle service selection
+    else if (field.name === "serviceName") {
+      const selectedService: any = field.options?.find(
+        (opt: any) => opt.value === event.target.value
+      );
       if (selectedService) {
         field.value = selectedService.value;
-        // update service amount field
-        const serviceAmountIndex = newFields.findIndex((f) => f.name === "service_amount");
+
+        // auto-fill service amount
+        const serviceAmountIndex = newFields.findIndex(
+          (f) => f.name === "serviceAmount"
+        );
         if (serviceAmountIndex !== -1) {
           newFields[serviceAmountIndex].value = selectedService.price.toString();
         }
@@ -169,6 +225,8 @@ const useBill = () => {
     fields,
     handleSubmit,
     handleInputChange,
+    services,
+    customers,
   };
 };
 

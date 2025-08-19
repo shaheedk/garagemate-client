@@ -58,7 +58,7 @@ interface WorkOrderData {
   costumerId: string;
   vehicleId: string;
   serviceId?: string;
-  productIds: string[];
+  productId: string[];
   extraCharges: ExtraCharge[];
   totalServiceCharge: number;
   totalProductCost: number;
@@ -187,7 +187,7 @@ const WorkOrderCreator: React.FC = () => {
       costumerId: selectedCustomer._id,
       vehicleId: selectedVehicle._id,
       serviceId: selectedService?._id,
-      productIds: selectedProducts.map(p => p._id),
+      productId: selectedProducts.map(p => p._id),
       extraCharges,
       totalServiceCharge: calculateServiceTotal(),
       totalProductCost: calculateProductTotal(),

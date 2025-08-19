@@ -40,6 +40,7 @@ const Billing = () => {
                     name={field.name}
                     type={field.type}
                     value={field.value}
+                    options={field.options}
                     placeholder={field.placeholder}
                     onChange={(e) => handleInputChange(index, e)}
                     className="w-full"
@@ -60,6 +61,7 @@ const Billing = () => {
                     type={field.type}
                     value={field.value}
                     placeholder={field.placeholder}
+                    options={field.options} // ✅ pass options
                     onChange={(e) => handleInputChange(index + 4, e)}
                     className="w-full"
                   />
@@ -100,38 +102,36 @@ const Billing = () => {
               </div>
             </div>
 
-            
             <div className="flex items-center justify-between gap-4 py-4">
-  {/* Payment Method Section */}
-  <div>
-    <h3 className="text-xl font-semibold mb-2">Payment Method</h3>
-    <div className="flex gap-2">
-      <button
-        type="button"
-        className="px-4 py-2 border rounded-md hover:bg-gray-100 transition"
-      >
-        CASH
-      </button>
-      <button
-        type="button"
-        className="px-4 py-2 border rounded-md hover:bg-gray-100 transition"
-      >
-        UPI
-      </button>
-    </div>
-  </div>
+              {/* Payment Method Section */}
+              <div>
+                <h3 className="text-xl font-semibold mb-2">Payment Method</h3>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    className="px-4 py-2 border rounded-md hover:bg-gray-100 transition"
+                  >
+                    CASH
+                  </button>
+                  <button
+                    type="button"
+                    className="px-4 py-2 border rounded-md hover:bg-gray-100 transition"
+                  >
+                    UPI
+                  </button>
+                </div>
+              </div>
 
-  {/* Print Bill Button */}
-  <div>
-    <button
-      type="submit"
-      className="px-8 py-3 bg-gray-300 text-black font-medium rounded-md hover:bg-gray-400 transition mt-8"
-    >
-      Print Bill
-    </button>
-  </div>
-</div>
-
+              {/* Print Bill Button */}
+              <div>
+                <button
+                  type="submit"
+                  className="px-8 py-3 bg-gray-300 text-black font-medium rounded-md hover:bg-gray-400 transition mt-8"
+                >
+                  Print Bill
+                </button>
+              </div>
+            </div>
           </form>
         </div>
         <div className="bg-white rounded-xl p-6 shadow-sm mt-8">
