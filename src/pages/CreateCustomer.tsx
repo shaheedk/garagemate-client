@@ -15,7 +15,7 @@ const CreateCustomer = () => {
     setMessage("");
 
     try {
-      const response = await instance.post("/costumer", {
+      const response = await instance.post("/customer", {
         name,
         phone,
         email,

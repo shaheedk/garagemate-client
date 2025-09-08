@@ -1,6 +1,6 @@
 import { AiFillProduct } from "react-icons/ai";
 import Card from "../common/buttons/NavigationBtn";
-import { FaFileInvoice, FaUserTie, FaCar,  FaTools, FaTags, FaClipboardList } from "react-icons/fa";
+import { FaFileInvoice,   FaTools, FaClipboardList,  } from "react-icons/fa";
 
 const Dashboard = () => {
   const cards = [
@@ -16,31 +16,37 @@ const Dashboard = () => {
       path: "/bill",
       icon: <FaFileInvoice />,
     },
-    {
-      title: "Customers",
-      description: "View and manage customer vehicles",
-      path: "/customer",
-      icon: <FaCar />,
-    },
- 
+    // {
+    //   title: "Customers",
+    //   description: "View and manage customers",
+    //   path: "/customers",
+    //   icon: <FaUsers />,
+    // },
+    // {
+    //   title: "Vehicles",
+    //   description: "View and manage vehicles",
+    //   path: "/vehicles",
+    //   icon: <FaCar />,
+    // },
     {
       title: "Services",
       description: "Manage service types",
       path: "/services",
       icon: <FaTools />,
     },
+    // {
+    //   title: "Coupons",
+    //   description: "Manage discount coupons",
+    //   path: "/coupons",
+    //   icon: <FaTags />,
+    // },
+    // {
+    //   title: "Employees",
+    //   description: "Employee roles and status",
+    //   path: "/employees",
+    //   icon: <FaUserTie />,
+    // },
     {
-      title: "Coupons",
-      description: "Manage discount coupons",
-      path: "/coupen",
-      icon: <FaTags />,
-    },
-    {
-      title: "Employees",
-      description: "Employee roles and status",
-      path: "/employees",
-      icon: <FaUserTie />,
-    },{
       title: "Products",
       description: "Manage Products",
       path: "/products",
@@ -66,4 +72,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard
+export default Dashboard;
